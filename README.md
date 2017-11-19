@@ -2,5 +2,5 @@
 
 ## Vexation
 
-This game is creating based on sprite from game [Titan Souls](http://store.steampowered.com/app/297130/Titan_Souls/ "Titan Souls"). I have no experience with Unity but the hole idea for the game is to created something like Diablo (of course much less complicated). You can find more infomation on [Trello](https://trello.com/b/kBVdI8HP "Trello"). Any suggestion will be very welcome!
+This game is creating based on sprite from game [Titan Souls](http://store.steampowered.com/app/297130/Titan_Souls/ "Titan Souls"). I have no experience with Unity but the idea for the game is to created something like Diablo (of course much less complicated). You can find more infomation on [Trello](https://trello.com/b/kBVdI8HP "Trello"). Any suggestion will be very welcome!
 
