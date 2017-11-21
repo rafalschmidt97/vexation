@@ -23,27 +23,27 @@ public class Hero : MonoBehaviour {
 	}
 	
 	void Update () {
-		if(alive != true) {
-            rb.velocity = Vector2.zero;
-            return;
-        }
+		// if(alive != true) {
+        //     rb.velocity = Vector2.zero;
+        //     return;
+        // }
 
-		Vector2 newDirection = Vector2.zero;
+		Vector3 newDirection = Vector3.zero;
 		
 		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < 0) {
-			newDirection += Vector2Int.left;
+			newDirection += Vector3Int.left;
 		}
 			
 		if (Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0) {
-			newDirection += Vector2Int.right;
+			newDirection += Vector3Int.right;
 		}
 			
 		if (Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical") > 0) {
-			newDirection += Vector2Int.up;
+			newDirection += Vector3.up;
 		}
 			
 		if (Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical") < 0) {
-			newDirection += Vector2Int.down;
+			newDirection += Vector3.down;
 		}
 		
 		if (newDirection.magnitude > 0 && (newDirection.x != direction.x || newDirection.y != direction.y)) {
@@ -52,7 +52,16 @@ public class Hero : MonoBehaviour {
 		}
 
 		rb.velocity = Vector2.ClampMagnitude(newDirection, 1f) * speed;
-        animator.SetBool("walking", newDirection.magnitude > 0);
+		// transform.Translate(newDirection * speed * Time.deltaTime);
+
+
+		if (newDirection.magnitude > 0) {
+			animator.SetLayerWeight(1,1);
+		} else {
+			animator.SetLayerWeight(1,0);
+		}
+
+        // animator.SetBool("walking", newDirection.magnitude > 0);
 
 		direction = newDirection;
 	}
