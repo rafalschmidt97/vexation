@@ -30,19 +30,19 @@ public class Hero : MonoBehaviour {
 
 		Vector3 newDirection = Vector3.zero;
 		
-		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < 0) {
+		if (Input.GetAxis("Horizontal") < 0) {
 			newDirection += Vector3Int.left;
 		}
 			
-		if (Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0) {
+		if (Input.GetAxis("Horizontal") > 0) {
 			newDirection += Vector3Int.right;
 		}
 			
-		if (Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical") > 0) {
+		if (Input.GetAxis("Vertical") > 0) {
 			newDirection += Vector3.up;
 		}
 			
-		if (Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical") < 0) {
+		if (Input.GetAxis("Vertical") < 0) {
 			newDirection += Vector3.down;
 		}
 		
@@ -53,7 +53,6 @@ public class Hero : MonoBehaviour {
 
 		rb.velocity = Vector2.ClampMagnitude(newDirection, 1f) * speed;
 		// transform.Translate(newDirection * speed * Time.deltaTime);
-
 
 		if (newDirection.magnitude > 0) {
 			animator.SetLayerWeight(1,1);
