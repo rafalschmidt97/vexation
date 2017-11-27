@@ -10,9 +10,9 @@ using UnityEngine.UI;
 
 public class Stat : MonoBehaviour {
 
-	private Image sprite;
-	private float value;
-	private float maxValue;
+	Image sprite;
+	float value;
+	float maxValue;
 
 	public float Value { 
 		get {
@@ -34,10 +34,15 @@ public class Stat : MonoBehaviour {
 		get {
 			return maxValue;
 		}
-		
+
 		set {
 			maxValue = value;
 		}
+	}
+
+	public void Initialize(float initialValue) {
+		value = initialValue;
+		maxValue = initialValue;
 	}
 
 	void Start () {
@@ -45,11 +50,6 @@ public class Stat : MonoBehaviour {
 	}
 
 	void Update () {
-		sprite.fillAmount = value / maxValue;
-	}
-
-	public void Initialize(float initialValue) {
-		value = initialValue;
-		maxValue = initialValue;
+		sprite.fillAmount = Value / MaxValue;
 	}
 }
