@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Hero : MonoBehaviour {
 
@@ -14,6 +15,18 @@ public class Hero : MonoBehaviour {
 
 	[SerializeField]
 	float rollSpeed;
+
+	[SerializeField]
+	float zoomSize;
+	
+	[SerializeField]
+	float zoomInSize;
+
+	[SerializeField]
+	float zoomInSpeed;
+
+	[SerializeField]
+	float zoomOutSpeed;
 
 	[SerializeField]
 	float initialHealth;
@@ -30,10 +43,14 @@ public class Hero : MonoBehaviour {
 	[SerializeField]
 	Stat stamina;
 
+	[SerializeField]
+	CinemachineVirtualCamera virtualCamera;
+
 	Animator animator;
 	Rigidbody2D rb;
 	Vector2 direction;
 	float lastRollTime;
+	bool fire;
 
 	bool Alive {
 		get {
@@ -54,16 +71,16 @@ public class Hero : MonoBehaviour {
 	}
 
 	void Start () {
-		direction = Vector2.zero;
 		rb = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 		health.Initialize(initialHealth);
 		stamina.Initialize(initialStamina);
+		virtualCamera.m_Lens.OrthographicSize = zoomSize;
 		InvokeRepeating("UpdateStamina", 0, initialStaminaUpdateSpeed);
 	}
 
 	void FixedUpdate() {
-		rb.velocity = Vector2.ClampMagnitude(direction, 1f) * (Roll ? rollSpeed : walkSpeed) * (Alive ? 1 : 0);
+		rb.velocity = Vector2.ClampMagnitude(direction, 1f) * (Roll ? rollSpeed : walkSpeed) * (Alive ? 1 : 0) * (fire ? 0 : 1);
 	}
 
 	void Update () {
@@ -93,6 +110,14 @@ public class Hero : MonoBehaviour {
 					animator.SetTrigger("roll");
 				} 
 
+				if (Input.GetButtonDown("Fire")) {
+					fire = true;
+				}
+
+				if (Input.GetButtonUp("Fire")) {
+					fire = false;
+				}
+
 				if (Input.GetButtonDown("R1")) {
 					health.Value += 1;
 				}
@@ -106,12 +131,17 @@ public class Hero : MonoBehaviour {
 					animator.SetInteger("y", (int)newDirection.y);
 				}  
 
-				if (newDirection.magnitude > 0) {
-					ActivateLayer("Walk");
+				if (fire) {
+					ActivateLayer("Fire");
 				} else {
-					ActivateLayer("Idle");
+					if (newDirection.magnitude > 0) {
+						ActivateLayer("Walk");
+					} else {
+						ActivateLayer("Idle");
+					}
 				}
-
+				
+				virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(virtualCamera.m_Lens.OrthographicSize, fire ? zoomInSize : zoomSize, fire ? Time.deltaTime * zoomInSpeed : Time.deltaTime * zoomOutSpeed);
 				direction = newDirection;
 			}
 		} else {
