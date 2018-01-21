@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Stat : MonoBehaviour {
-
 	Image sprite;
 	float value;
 	float maxValue;

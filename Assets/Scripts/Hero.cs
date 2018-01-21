@@ -9,42 +9,18 @@ using UnityEngine;
 using Cinemachine;
 
 public class Hero : MonoBehaviour {
-
-	[SerializeField]
-	float walkSpeed;
-
-	[SerializeField]
-	float rollSpeed;
-
-	[SerializeField]
-	float zoomSize;
-	
-	[SerializeField]
-	float zoomInSize;
-
-	[SerializeField]
-	float zoomInSpeed;
-
-	[SerializeField]
-	float zoomOutSpeed;
-
-	[SerializeField]
-	float initialHealth;
-
-	[SerializeField]
-	float initialStamina;
-
-	[SerializeField]
-	float initialStaminaUpdateSpeed;
-
-	[SerializeField]
-	Stat health;
-
-	[SerializeField]
-	Stat stamina;
-
-	[SerializeField]
-	CinemachineVirtualCamera virtualCamera;
+	[SerializeField] float walkSpeed;
+	[SerializeField] float rollSpeed;
+	[SerializeField] float zoomSize;
+	[SerializeField] float zoomInSize;
+	[SerializeField] float zoomInSpeed;
+	[SerializeField] float zoomOutSpeed;
+	[SerializeField] float initialHealth;
+	[SerializeField] float initialStamina;
+	[SerializeField] float initialStaminaUpdateSpeed;
+	[SerializeField] Stat health;
+	[SerializeField] Stat stamina;
+	[SerializeField] CinemachineVirtualCamera virtualCamera;
 
 	Animator animator;
 	Rigidbody2D rb;
@@ -88,21 +64,17 @@ public class Hero : MonoBehaviour {
 			if (!Roll) {
 				Vector3 newDirection = Vector3.zero;
 
-				if (Input.GetAxis("Horizontal") < 0) {
+				if (Input.GetAxis("Horizontal") < 0)
 					newDirection += Vector3Int.left;
-				}
 
-				if (Input.GetAxis("Horizontal") > 0) {
+				if (Input.GetAxis("Horizontal") > 0)
 					newDirection += Vector3Int.right;
-				}
 
-				if (Input.GetAxis("Vertical") > 0) {
+				if (Input.GetAxis("Vertical") > 0)
 					newDirection += Vector3.up;
-				}
 
-				if (Input.GetAxis("Vertical") < 0) {
+				if (Input.GetAxis("Vertical") < 0)
 					newDirection += Vector3.down;
-				}
 
 				if (Input.GetButtonDown("Roll") && newDirection.magnitude > 0  && CanRoll) {
 					stamina.Value -= 1;
@@ -110,21 +82,17 @@ public class Hero : MonoBehaviour {
 					animator.SetTrigger("roll");
 				} 
 
-				if (Input.GetButtonDown("Fire")) {
+				if (Input.GetButtonDown("Fire"))
 					fire = true;
-				}
 
-				if (Input.GetButtonUp("Fire")) {
+				if (Input.GetButtonUp("Fire"))
 					fire = false;
-				}
 
-				if (Input.GetButtonDown("R1")) {
+				if (Input.GetButtonDown("R1"))
 					health.Value += 1;
-				}
 
-				if (Input.GetButtonDown("L1")) {
+				if (Input.GetButtonDown("L1"))
 					health.Value -= 1;
-				}
 
 				if (newDirection.magnitude > 0 && (newDirection.x != direction.x || newDirection.y != direction.y)) {
 					animator.SetInteger("x", (int)newDirection.x);
@@ -156,9 +124,8 @@ public class Hero : MonoBehaviour {
 	}
 
 	void ActivateLayer(string layerName) {
-		for (int i = 0; i < animator.layerCount; i++) {
+		for (int i = 0; i < animator.layerCount; i++)
 			animator.SetLayerWeight(i, 0);
-		}
 
 		animator.SetLayerWeight(animator.GetLayerIndex(layerName), 1);
 	}
