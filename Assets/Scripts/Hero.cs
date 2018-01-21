@@ -10,6 +10,7 @@ using Cinemachine;
 
 public class Hero : MonoBehaviour {
 	[SerializeField] float walkSpeed;
+	[SerializeField] float runSpeed;
 	[SerializeField] float rollSpeed;
 	[SerializeField] float zoomSize;
 	[SerializeField] float zoomInSize;
@@ -25,8 +26,9 @@ public class Hero : MonoBehaviour {
 	Animator animator;
 	Rigidbody2D rb;
 	Vector2 direction;
-	float lastRollTime;
-	bool fire;
+	float lastRollTime = 0;
+	bool fire = false;
+	bool run = false;
 
 	bool Alive {
 		get {
@@ -56,7 +58,7 @@ public class Hero : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		rb.velocity = Vector2.ClampMagnitude(direction, 1f) * (Roll ? rollSpeed : walkSpeed) * (Alive ? 1 : 0) * (fire ? 0 : 1);
+		rb.velocity = Vector2.ClampMagnitude(direction, 1f) * (Roll ? rollSpeed : (run ? runSpeed : walkSpeed)) * (Alive ? 1 : 0) * (fire ? 0 : 1);
 	}
 
 	void Update () {
@@ -94,16 +96,23 @@ public class Hero : MonoBehaviour {
 				if (Input.GetButtonDown("L1"))
 					health.Value -= 1;
 
+				if (Input.GetButtonDown("Cancel"))
+					run = !run;
+			
 				if (newDirection.magnitude > 0 && (newDirection.x != direction.x || newDirection.y != direction.y)) {
 					animator.SetInteger("x", (int)newDirection.x);
 					animator.SetInteger("y", (int)newDirection.y);
-				}  
+				}
 
 				if (fire) {
 					ActivateLayer("Fire");
 				} else {
 					if (newDirection.magnitude > 0) {
-						ActivateLayer("Walk");
+						if (run) {
+							ActivateLayer("Run");
+						} else {
+							ActivateLayer("Walk");
+						}
 					} else {
 						ActivateLayer("Idle");
 					}

@@ -400,7 +400,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 586469937}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.1443192, y: -0.33207583, z: -9.800781}
+  m_LocalPosition: {x: -1.1443138, y: -0.33207583, z: -9.800781}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 347767617}
@@ -3549,7 +3549,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 960361412}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.1443192, y: -0.33207583, z: -9.800781}
+  m_LocalPosition: {x: -1.1443138, y: -0.33207583, z: -9.800781}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1178179489}
@@ -3934,7 +3934,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da7947c6122649c0bb9802c7de6f688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 7
+  walkSpeed: 6
+  runSpeed: 8
   rollSpeed: 12.25
   zoomSize: 10
   zoomInSize: 12
@@ -5858,7 +5859,7 @@ Tilemap:
   - serializedVersion: 1
     m_DirtyIndex: 0
   - serializedVersion: 1
-    m_DirtyIndex: 82
+    m_DirtyIndex: 0
 --- !u!66 &2091130685
 CompositeCollider2D:
   m_ObjectHideFlags: 0
