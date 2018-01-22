@@ -12,6 +12,7 @@ public class Hero : MonoBehaviour {
 	[SerializeField] float walkSpeed;
 	[SerializeField] float runSpeed;
 	[SerializeField] float rollSpeed;
+	[SerializeField] float arrowSpeed;
 	[SerializeField] float zoomSize;
 	[SerializeField] float zoomInSize;
 	[SerializeField] float zoomInSpeed;
@@ -22,13 +23,17 @@ public class Hero : MonoBehaviour {
 	[SerializeField] Stat health;
 	[SerializeField] Stat stamina;
 	[SerializeField] CinemachineVirtualCamera virtualCamera;
+	[SerializeField] Transform[] arrowPoints;
+	[SerializeField] GameObject arrowPrefab;
 
 	Animator animator;
 	Rigidbody2D rb;
-	Vector2 direction;
-	float lastRollTime = 0;
-	bool fire = false;
-	bool run = false;
+	Vector3 direction;
+	Vector3 directionLook;
+	float lastRollTime;
+	bool fire;
+	bool run;
+	int arrowDirection;
 
 	bool Alive {
 		get {
@@ -49,6 +54,7 @@ public class Hero : MonoBehaviour {
 	}
 
 	void Start () {
+		directionLook = Vector3Int.down;
 		rb = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 		health.Initialize(initialHealth);
@@ -63,6 +69,12 @@ public class Hero : MonoBehaviour {
 
 	void Update () {
 		if (Alive) {
+			if (Input.GetButtonDown("Cancel"))
+				run = true;
+
+			if (Input.GetButtonUp("Cancel"))
+				run = false;
+
 			if (!Roll) {
 				Vector3 newDirection = Vector3.zero;
 
@@ -78,31 +90,37 @@ public class Hero : MonoBehaviour {
 				if (Input.GetAxis("Vertical") < 0)
 					newDirection += Vector3.down;
 
+				if (newDirection.magnitude > 0)
+					directionLook = newDirection;
+
+				UpdateArrowDirection(directionLook);
+
 				if (Input.GetButtonDown("Roll") && newDirection.magnitude > 0  && CanRoll) {
 					stamina.Value -= 1;
 					lastRollTime = Time.unscaledTime;
 					animator.SetTrigger("roll");
-				} 
+				}
 
 				if (Input.GetButtonDown("Fire"))
 					fire = true;
 
-				if (Input.GetButtonUp("Fire"))
+				if (Input.GetButtonUp("Fire")) {
 					fire = false;
+					GameObject obj = (GameObject)Instantiate(arrowPrefab, arrowPoints[arrowDirection].position, arrowPoints[arrowDirection].rotation);
+					obj.GetComponent<Rigidbody2D>().velocity = Vector2.ClampMagnitude(directionLook, 1f) * arrowSpeed;
+				}
 
 				if (Input.GetButtonDown("R1"))
 					health.Value += 1;
 
 				if (Input.GetButtonDown("L1"))
 					health.Value -= 1;
-
-				if (Input.GetButtonDown("Cancel"))
-					run = !run;
 			
-				if (newDirection.magnitude > 0 && (newDirection.x != direction.x || newDirection.y != direction.y)) {
-					animator.SetInteger("x", (int)newDirection.x);
-					animator.SetInteger("y", (int)newDirection.y);
-				}
+				animator.SetInteger("x", (int)newDirection.x);
+				animator.SetInteger("y", (int)newDirection.y);
+
+				virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(virtualCamera.m_Lens.OrthographicSize, fire ? zoomInSize : zoomSize, fire ? Time.deltaTime * zoomInSpeed : Time.deltaTime * zoomOutSpeed);
+				direction = newDirection;
 
 				if (fire) {
 					ActivateLayer("Fire");
@@ -117,9 +135,6 @@ public class Hero : MonoBehaviour {
 						ActivateLayer("Idle");
 					}
 				}
-				
-				virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(virtualCamera.m_Lens.OrthographicSize, fire ? zoomInSize : zoomSize, fire ? Time.deltaTime * zoomInSpeed : Time.deltaTime * zoomOutSpeed);
-				direction = newDirection;
 			}
 		} else {
 			animator.SetBool("alive", false); 
@@ -131,6 +146,26 @@ public class Hero : MonoBehaviour {
 		if (Alive && (lastRollTime + 0.5 + initialStaminaUpdateSpeed < Time.unscaledTime))
 			stamina.Value += 1;
 	}
+
+	void UpdateArrowDirection(Vector3 newDirection) {
+		if (newDirection.x == 0 && newDirection.y == 1) {
+			arrowDirection = 0;
+		} else if (newDirection.x == 1 && newDirection.y == 1) {
+			arrowDirection = 1;
+		} else if (newDirection.x == 1 && newDirection.y == 0) {
+			arrowDirection = 2;
+		} else if (newDirection.x == 1 && newDirection.y == -1) {
+			arrowDirection = 3;
+		} else if (newDirection.x == -1 && newDirection.y == -1) {
+			arrowDirection = 5;
+		} else if (newDirection.x == -1 && newDirection.y == 0) {
+			arrowDirection = 6;
+		} else if (newDirection.x == -1 && newDirection.y == 1) {
+			arrowDirection = 7;
+		} else {
+			arrowDirection = 4;
+		}
+  }
 
 	void ActivateLayer(string layerName) {
 		for (int i = 0; i < animator.layerCount; i++)

@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -44,8 +45,17 @@ TagManager:
   - name: Ground
     uniqueID: 2758668779
     locked: 0
-  - name: Characters
+  - name: Walls
+    uniqueID: 4217912435
+    locked: 0
+  - name: CharacterBehind
+    uniqueID: 1377574339
+    locked: 0
+  - name: Character
     uniqueID: 1237459291
+    locked: 0
+  - name: CharacterFront
+    uniqueID: 1459473737
     locked: 0
   - name: UI
     uniqueID: 1729361489
