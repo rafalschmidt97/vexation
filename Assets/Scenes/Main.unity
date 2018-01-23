@@ -4449,7 +4449,10 @@ MonoBehaviour:
   walkSpeed: 6
   runSpeed: 8
   rollSpeed: 12.25
-  arrowSpeed: 30
+  rollTime: 0.5
+  arrowSpeed: 45
+  arrowDragMax: 30
+  arrowDragSpeed: 10
   zoomSize: 11
   zoomInSize: 12
   zoomInSpeed: 1

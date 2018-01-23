@@ -12,7 +12,10 @@ public class Hero : MonoBehaviour {
 	[SerializeField] float walkSpeed;
 	[SerializeField] float runSpeed;
 	[SerializeField] float rollSpeed;
+	[SerializeField] float rollTime;
 	[SerializeField] float arrowSpeed;
+	[SerializeField] float arrowDragMax;
+	[SerializeField] float arrowDragSpeed;
 	[SerializeField] float zoomSize;
 	[SerializeField] float zoomInSize;
 	[SerializeField] float zoomInSpeed;
@@ -32,7 +35,9 @@ public class Hero : MonoBehaviour {
 	Vector3 directionLook;
 	float lastRollTime;
 	bool fire;
+	float fireButtonTime;
 	bool run;
+	bool roll;
 	int arrowDirection;
 
 	bool Alive {
@@ -41,15 +46,15 @@ public class Hero : MonoBehaviour {
 		}
 	}
 
-	bool Roll {
-		get {
-			return lastRollTime + 0.5 > Time.unscaledTime;
+	public bool Roll {
+		set {
+			roll = value;
 		}
 	}
 
 	bool CanRoll {
 		get {
-			return stamina.Value > 0;
+			return stamina.Value > 0 && !roll;
 		}
 	}
 
@@ -64,7 +69,7 @@ public class Hero : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		rb.velocity = Vector2.ClampMagnitude(direction, 1f) * (Roll ? rollSpeed : (run ? runSpeed : walkSpeed)) * (Alive ? 1 : 0) * (fire ? 0 : 1);
+		rb.velocity = Vector2.ClampMagnitude(direction, 1f) * (roll ? rollSpeed : (run ? runSpeed : walkSpeed)) * (Alive ? 1 : 0) * (fire ? 0 : 1);
 	}
 
 	void Update () {
@@ -75,7 +80,7 @@ public class Hero : MonoBehaviour {
 			if (Input.GetButtonUp("Cancel"))
 				run = false;
 
-			if (!Roll) {
+			if (!roll) {
 				Vector3 newDirection = Vector3.zero;
 
 				if (Input.GetAxis("Horizontal") < 0)
@@ -101,13 +106,21 @@ public class Hero : MonoBehaviour {
 					animator.SetTrigger("roll");
 				}
 
-				if (Input.GetButtonDown("Fire"))
+				if (Input.GetButtonDown("Fire")) {
 					fire = true;
+					fireButtonTime = Time.unscaledTime;
+				}
 
 				if (Input.GetButtonUp("Fire")) {
-					fire = false;
-					GameObject obj = (GameObject)Instantiate(arrowPrefab, arrowPoints[arrowDirection].position, arrowPoints[arrowDirection].rotation);
-					obj.GetComponent<Rigidbody2D>().velocity = Vector2.ClampMagnitude(directionLook, 1f) * arrowSpeed;
+					if (fire) {
+						fire = false;
+						Rigidbody2D obj = Instantiate(arrowPrefab, arrowPoints[arrowDirection].position, arrowPoints[arrowDirection].rotation).GetComponent<Rigidbody2D>();
+						obj.velocity = Vector2.ClampMagnitude(directionLook, 1f) * arrowSpeed;
+
+						if (fireButtonTime + 1 > Time.unscaledTime) {
+							obj.drag = arrowDragMax - (Mathf.Pow(arrowDragMax, Mathf.Pow(Time.unscaledTime - fireButtonTime, (1/arrowDragSpeed)))); 
+						}
+					}
 				}
 
 				if (Input.GetButtonDown("R1"))
@@ -143,7 +156,7 @@ public class Hero : MonoBehaviour {
 	}
 
 	void UpdateStamina() {
-		if (Alive && (lastRollTime + 0.5 + initialStaminaUpdateSpeed < Time.unscaledTime))
+		if (Alive && (lastRollTime + rollTime + initialStaminaUpdateSpeed < Time.unscaledTime))
 			stamina.Value += 1;
 	}
 

@@ -13,6 +13,12 @@ public class Arrow : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
 	}
+
+	void Update () {
+		if (rb.velocity == Vector2.zero) {
+			StartCoroutine(DestroyArrow());
+		}
+	}
 	
 	void OnTriggerEnter2D(Collider2D collider) {
 		if (collider.tag == "Wall") {
