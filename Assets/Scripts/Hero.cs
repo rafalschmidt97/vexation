@@ -129,8 +129,8 @@ public class Hero : MonoBehaviour {
 				if (Input.GetButtonDown("L1"))
 					health.Value -= 1;
 			
-				animator.SetInteger("x", (int)newDirection.x);
-				animator.SetInteger("y", (int)newDirection.y);
+				animator.SetInteger("x", (int)directionLook.x);
+				animator.SetInteger("y", (int)directionLook.y);
 
 				virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(virtualCamera.m_Lens.OrthographicSize, fire ? zoomInSize : zoomSize, fire ? Time.deltaTime * zoomInSpeed : Time.deltaTime * zoomOutSpeed);
 				direction = newDirection;
