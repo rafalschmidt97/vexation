@@ -23,8 +23,12 @@ public class Hero : MonoBehaviour {
 	[SerializeField] float initialHealth;
 	[SerializeField] float initialStamina;
 	[SerializeField] float initialStaminaUpdateSpeed;
-	[SerializeField] Stat health;
-	[SerializeField] Stat stamina;
+	[SerializeField] int initialArrows;
+	[SerializeField] int initialItem;
+	[SerializeField] StatFill health;
+	[SerializeField] StatFill stamina;
+	[SerializeField] StatValue arrows;
+	[SerializeField] StatValue item;
 	[SerializeField] CinemachineVirtualCamera virtualCamera;
 	[SerializeField] Transform[] arrowPoints;
 	[SerializeField] GameObject arrowPrefab;
@@ -33,22 +37,32 @@ public class Hero : MonoBehaviour {
 	Rigidbody2D rb;
 	Vector3 direction;
 	Vector3 directionLook;
+	int directionArrow;
+	bool roll;
 	float lastRollTime;
 	bool fire;
 	float fireButtonTime;
 	bool run;
-	bool roll;
-	int arrowDirection;
-
-	bool Alive {
-		get {
-			return health.Value > 0;
-		}
-	}
 
 	public bool Roll {
 		set {
 			roll = value;
+		}
+	}
+
+	public int Arrows {
+		set {
+			arrows.Value = value;
+		}
+
+		get {
+			return arrows.Value;
+		}
+	}
+
+	bool Alive {
+		get {
+			return health.Value > 0;
 		}
 	}
 
@@ -64,6 +78,8 @@ public class Hero : MonoBehaviour {
 		animator = GetComponent<Animator>();
 		health.Initialize(initialHealth);
 		stamina.Initialize(initialStamina);
+		arrows.Initialize(initialArrows);
+		item.Initialize(initialItem);
 		virtualCamera.m_Lens.OrthographicSize = zoomSize;
 		InvokeRepeating("UpdateStamina", 0, initialStaminaUpdateSpeed);
 	}
@@ -74,11 +90,17 @@ public class Hero : MonoBehaviour {
 
 	void Update () {
 		if (Alive) {
-			if (Input.GetButtonDown("Cancel"))
+			if (Input.GetButtonDown("Run"))
 				run = true;
 
-			if (Input.GetButtonUp("Cancel"))
+			if (Input.GetButtonUp("Run"))
 				run = false;
+
+			if (Input.GetButtonDown("Item")  && item.Value > 0) {
+				item.Value -= 1;
+				health.Value += 3;
+			}
+				
 
 			if (!roll) {
 				Vector3 newDirection = Vector3.zero;
@@ -98,7 +120,7 @@ public class Hero : MonoBehaviour {
 				if (newDirection.magnitude > 0)
 					directionLook = newDirection;
 
-				UpdateArrowDirection(directionLook);
+				UpdateDirectionArrow(directionLook);
 
 				if (Input.GetButtonDown("Roll") && newDirection.magnitude > 0  && CanRoll) {
 					stamina.Value -= 1;
@@ -106,7 +128,7 @@ public class Hero : MonoBehaviour {
 					animator.SetTrigger("roll");
 				}
 
-				if (Input.GetButtonDown("Fire")) {
+				if (Input.GetButtonDown("Fire") && arrows.Value > 0) {
 					fire = true;
 					fireButtonTime = Time.unscaledTime;
 				}
@@ -114,11 +136,13 @@ public class Hero : MonoBehaviour {
 				if (Input.GetButtonUp("Fire")) {
 					if (fire) {
 						fire = false;
-						Rigidbody2D obj = Instantiate(arrowPrefab, arrowPoints[arrowDirection].position, arrowPoints[arrowDirection].rotation).GetComponent<Rigidbody2D>();
-						obj.velocity = Vector2.ClampMagnitude(directionLook, 1f) * arrowSpeed;
+						arrows.Value -= 1;
+						GameObject obj = Instantiate(arrowPrefab, arrowPoints[directionArrow].position, arrowPoints[directionArrow].rotation);
+						Rigidbody2D objRb = obj.GetComponent<Rigidbody2D>();
+						objRb.velocity = Vector2.ClampMagnitude(directionLook, 1f) * arrowSpeed;
 
 						if (fireButtonTime + 1 > Time.unscaledTime) {
-							obj.drag = arrowDragMax - (Mathf.Pow(arrowDragMax, Mathf.Pow(Time.unscaledTime - fireButtonTime, (1/arrowDragSpeed)))); 
+							objRb.drag = arrowDragMax - (Mathf.Pow(arrowDragMax, Mathf.Pow(Time.unscaledTime - fireButtonTime, (1/arrowDragSpeed)))); 
 						}
 					}
 				}
@@ -160,23 +184,23 @@ public class Hero : MonoBehaviour {
 			stamina.Value += 1;
 	}
 
-	void UpdateArrowDirection(Vector3 newDirection) {
+	void UpdateDirectionArrow(Vector3 newDirection) {
 		if (newDirection.x == 0 && newDirection.y == 1) {
-			arrowDirection = 0;
+			directionArrow = 0;
 		} else if (newDirection.x == 1 && newDirection.y == 1) {
-			arrowDirection = 1;
+			directionArrow = 1;
 		} else if (newDirection.x == 1 && newDirection.y == 0) {
-			arrowDirection = 2;
+			directionArrow = 2;
 		} else if (newDirection.x == 1 && newDirection.y == -1) {
-			arrowDirection = 3;
+			directionArrow = 3;
 		} else if (newDirection.x == -1 && newDirection.y == -1) {
-			arrowDirection = 5;
+			directionArrow = 5;
 		} else if (newDirection.x == -1 && newDirection.y == 0) {
-			arrowDirection = 6;
+			directionArrow = 6;
 		} else if (newDirection.x == -1 && newDirection.y == 1) {
-			arrowDirection = 7;
+			directionArrow = 7;
 		} else {
-			arrowDirection = 4;
+			directionArrow = 4;
 		}
   }
 

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Wall
+  - Hero
   layers:
   - Default
   - TransparentFX
@@ -48,13 +49,13 @@ TagManager:
   - name: Walls
     uniqueID: 4217912435
     locked: 0
-  - name: CharacterBehind
+  - name: HeroBehind
     uniqueID: 1377574339
     locked: 0
-  - name: Character
+  - name: Hero
     uniqueID: 1237459291
     locked: 0
-  - name: CharacterFront
+  - name: HeroFront
     uniqueID: 1459473737
     locked: 0
   - name: UI

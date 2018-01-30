@@ -122,6 +122,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffa8e8d7a1664888a99341bf3bcc5fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyTime: 15
+  collideTime: 5
+  pickUpMaxVelocity: 2
 --- !u!212 &212530553573742796
 SpriteRenderer:
   m_ObjectHideFlags: 1

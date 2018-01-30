@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Stat : MonoBehaviour {
+public class StatFill : MonoBehaviour {
 	Image sprite;
 	float value;
 	float maxValue;
