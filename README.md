@@ -1,6 +1,17 @@
-![](https://trello-attachments.s3.amazonaws.com/5a106f10527a5f249e952a48/5a106f93cb59d5234849dd89/4de51659f99a1fb28c7a0bf34638ecd9/character-scale3x-size6x.gif)
+This game is creating based on sprite from game Titan Souls. I have no experience with Unity but the idea for the game is to create something like Diablo (of course much less complicated.
 
-## Vexation
+Project has been rejected 😅 (I don't enjoy working with Unity)
 
-This game is creating based on sprite from game [Titan Souls](http://store.steampowered.com/app/297130/Titan_Souls/ "Titan Souls"). I have no experience with Unity but the idea for the game is to created something like Diablo (of course much less complicated). You can find more infomation on [Trello](https://trello.com/b/kBVdI8HP "Trello"). Any suggestion will be very welcome!
+## Screenshots
 
+![](preview2.png)
+![](preview3.png)
+![](preview1.gif)
+
+## Stay in touch
+
+* Website - [rafalschmidt.com](https://rafalschmidt.com/)
+* Facebook - [rafalschmidt97](https://facebook.com/rafalschmidt97/)
+* Twitter - [rafalschmidt97](https://twitter.com/rafalschmidt97/)
+* Instagram - [rafalschmidt97](https://instagram.com/rafalschmidt97/)
+* Email - [rafalschmidt97@gmail.com](mailto:rafalschmidt97@gmail.com)
