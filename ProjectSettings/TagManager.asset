@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Wall
+  - Hero
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 2758668779
+    locked: 0
+  - name: Walls
+    uniqueID: 4217912435
+    locked: 0
+  - name: HeroBehind
+    uniqueID: 1377574339
+    locked: 0
+  - name: Hero
+    uniqueID: 1237459291
+    locked: 0
+  - name: HeroFront
+    uniqueID: 1459473737
+    locked: 0
+  - name: UI
+    uniqueID: 1729361489
+    locked: 0
